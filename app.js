@@ -6,3 +6,19 @@ const init = () => {
         video.srcObject = stream
     })
 }
+
+Promise.all([
+    faceapi.nets.faceExpressionNet.loadFromUri('/models'),
+    faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
+    faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+    faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+]).then(
+    init(),
+    err => {
+        console.error(err)
+    }
+)
+
+
+
+
