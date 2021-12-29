@@ -8,10 +8,22 @@
     <meta name="description" content="Face expression detector" >
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
     <div class="container">
-        <video id="video" width="720" height="560" autoplay></video>
+        <header class="flex justify-center items-center py-4 text-xl font-semibold">
+            <h1>Real Time Face Detector</h1>
+        </header>
+        <main>
+            <h3 class="text-lg">
+                Body language:<span id="details" class="px-2"></span>
+            </h3>
+            <div id="wrapper" class="mx-auto">
+                <video id="video" width="720" height="560" autoplay></video>
+            </div>
+        </main>
+
     </div>
     <script src="face-api.min.js"></script>
     <script src="app.js"></script>

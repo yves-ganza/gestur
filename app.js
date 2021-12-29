@@ -1,5 +1,6 @@
-const container = document.getElementsByClassName('container')[0]
+const wrapper = document.getElementById('wrapper')
 const video = document.getElementById('video')
+const textField = document.getElementById('details')
 
 const init = () => {
     navigator.mediaDevices.getUserMedia({video:{}}).then(stream => {
@@ -21,20 +22,25 @@ Promise.all([
 
 video.onplay = () => {
     const canvas = faceapi.createCanvasFromMedia(video)
-    container.append(canvas)
+    wrapper.append(canvas)
     const displaySize = {width: video.width, height: video.height}
     faceapi.matchDimensions(canvas, displaySize)
 
     setInterval(
         async () => {
             const detectionsWithExpression = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
-            const resizedDetections = faceapi.resizeResults(detectionsWithExpression, displaySize)
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-            faceapi.draw.drawDetections(canvas, resizedDetections)
-            const minProbability = 0.05
-            faceapi.draw.drawFaceExpressions(canvas, resizedDetections, minProbability)
+            textField.innerText = ''
+
+            if(detectionsWithExpression){
+                const {expression, confidence} = detectionsWithExpression[0].expressions.asSortedArray()[0]
+                textField.innerText = `${expression}`
+                const resizedDetections = faceapi.resizeResults(detectionsWithExpression, displaySize)
+                const minProbability = 0.05
+                faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+            }
         },
-        1000
+        100
     )
 }
 
